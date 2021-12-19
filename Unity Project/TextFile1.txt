@@ -1,0 +1,104 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class ScalerBig1 : MonoBehaviour
+{
+    public MeshFilter[] childrenMeshes;
+    public Renderer[] childrenRenderer;
+    [SerializeField]
+
+    private Text imageTrackedText;
+    Text pomozniUI;
+
+    public float ScaleX = 1.0f;
+    public float ScaleY = 1.0f;
+    public float ScaleZ = 1.0f;
+    public bool RecalculateNormals = false;
+    private Vector3[] _baseVertices;
+
+    public float[] randomValues;
+    public float[] randomValuesColor;
+    public GameObject platno;
+    public int NumberOfMashes = 17;
+
+    //array 
+    private Vector3[] translateVector; 
+
+    private void Start()
+    {
+        childrenMeshes = GetComponentsInChildren<MeshFilter>();
+        childrenRenderer = GetComponentsInChildren<Renderer>();
+
+
+        randomValues = new float[NumberOfMashes];
+        randomValuesColor = new float[NumberOfMashes];
+
+        for (var i = 0; i < NumberOfMashes; i++) {
+            randomValues[i] = Random.value;
+            randomValuesColor[i] = Random.Range(0.0f, 1.0f);
+        }
+        int index = 0; 
+        foreach (Transform child in transform)
+        {
+           translateVector[index] = child.position;
+            index++; 
+        }
+       GameObject platno = GameObject.Find("platno");
+         pomozniUI = platno.GetComponent<Text>();
+        Debug.Log(pomozniUI.text); 
+        pomozniUI.text = "lalalal";
+
+
+    }
+
+    public void Update()
+    {
+        Vector3 temp = new Vector3(0.0f, 0, 10.0f);
+
+        pomozniUI.text = "neki";
+            //spreminjajo se pozicije meshov glede na x os
+        var scalefactor = Mathf.Abs(Camera.main.gameObject.transform.position[0]);
+        
+        int i = 0; 
+    
+
+            int stevec = 1;
+        
+            foreach (Transform child in transform)
+            {
+          //  if (stevec < 10)
+           // {
+            //   if (Mathf.Abs(child.position[]) < 0.24f)
+            //   {
+            //  transform.Translate(Vector3.forward *100.0f);
+           // child.transform.Translate(Vector3.up * Time.deltaTime * 100.0f);
+            // child.Translate( temp);
+                  child.position = child.position + Vector3.forward * 0.0010f * stevec * scalefactor;                   
+            //  }
+
+
+            // child.position = child.position + Vector3.forward * 0.010f * stevec * scalefactor;
+            //  }
+            stevec++;
+            i++;
+           
+        }
+        
+        
+        
+        //spreminjajo se barve glede na rotacijo 
+        var colorFactor = Mathf.Abs(Camera.main.gameObject.transform.rotation[0]);
+
+        int counterColor = 0;
+
+        foreach (Renderer cubeRenderer in childrenRenderer)
+        {
+            var newColor = colorFactor*10;
+            counterColor++;
+            cubeRenderer.material.SetColor("_Color", new Color(newColor, newColor, 0.5F, 1.0F));
+        }
+    }
+}
+
